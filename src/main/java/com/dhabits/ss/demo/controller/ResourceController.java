@@ -4,12 +4,14 @@ import com.dhabits.ss.demo.domain.model.ResourceObject;
 import com.dhabits.ss.demo.service.ResourceObjectService;
 import lombok.*;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/resource")
 public class ResourceController {
 
