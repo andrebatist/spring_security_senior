@@ -1,11 +1,13 @@
 package com.dhabits.ss.demo.service.impls;
 
+import com.dhabits.ss.demo.config.JwtProperties;
 import com.dhabits.ss.demo.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
-    public static final String SECRET = "5DBFC1AB0B3C955B92C361A910FECCAA70D0BE2EF9E0F2DE6361171412DDDCE9";
+    private final JwtProperties jwtProperties;
 
     @Override
     public String extractUsername(String token) {
@@ -69,13 +72,13 @@ public class JwtServiceImpl implements JwtService {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*60))  // время жизни 1 час
+                .setExpiration(new Date(System.currentTimeMillis()+1000*jwtProperties.getAccessTokenValid()))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
     @Override
     public Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

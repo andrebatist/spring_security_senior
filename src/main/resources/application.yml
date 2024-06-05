@@ -15,3 +15,8 @@ spring:
 
 server:
   port: 9000
+
+jwt:
+  secret: 5DBFC1AB0B3C955B92C361A910FECCAA70D0BE2EF9E0F2DE6361171412DDDCE9
+  accessTokenValid: 120
+  refreshTokenValid: 300
